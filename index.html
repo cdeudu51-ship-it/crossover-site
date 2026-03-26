@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VideoChat AI</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
+
+body{
+  background:#000;
+  color:white;
+}
+
+/* ===== LOGIN ===== */
+.screen{
+  display:none;
+  height:100vh;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+}
+
+.active{display:flex;}
+
+input, select, button{
+  padding:12px;
+  margin:8px;
+  border-radius:10px;
+  border:none;
+}
+
+button{
+  background:#111;
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.05);
+  background:#222;
+}
+
+/* ===== CUSTOMIZE ===== */
+#customize{
+  padding:30px;
+  align-items:flex-start;
+}
+
+.title{
+  font-size:32px;
+  margin-bottom:20px;
+}
+
+.interest-box{
+  display:flex;
+}
+
+.interest-box input{
+  width:300px;
+}
+
+.interests{
+  margin-top:10px;
+  display:flex;
+  flex-wrap:wrap;
+}
+
+.tag{
+  background:#111;
+  padding:6px 12px;
+  border-radius:20px;
+  margin:5px;
+}
+
+/* divider neon */
+.divider{
+  width:100%;
+  height:2px;
+  background:linear-gradient(90deg, transparent, #0ff, transparent);
+  margin:40px 0;
+  animation:glow 2s infinite;
+}
+
+@keyframes glow{
+  0%{opacity:0.3;}
+  50%{opacity:1;}
+  100%{opacity:0.3;}
+}
+
+/* ===== MODE ===== */
+.mode-buttons button{
+  padding:20px 40px;
+  font-size:18px;
+}
+
+/* ===== VIDEO ===== */
+#video{
+  display:none;
+  flex-direction:column;
+  height:100vh;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  padding:10px;
+}
+
+.videos{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+}
+
+.video-box{
+  width:40%;
+  height:250px;
+  background:#111;
+}
+
+.chat{
+  position:absolute;
+  right:0;
+  top:0;
+  width:300px;
+  height:100%;
+  background:#0a0a0a;
+}
+
+.chat input{
+  width:80%;
+}
+
+.controls{
+  display:flex;
+  justify-content:space-around;
+  margin-top:20px;
+}
+
+.big-btn{
+  padding:15px 25px;
+  font-size:16px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login" class="screen active">
+  <h1>Login</h1>
+  <input placeholder="Username">
+  <input type="password" placeholder="Password">
+
+  <select>
+    <option>Maschio</option>
+    <option>Femmina</option>
+  </select>
+
+  <select>
+    <option>Ho 18+</option>
+    <option>Non ho 18</option>
+  </select>
+
+  <select>
+    <option>Italiano</option>
+    <option>English</option>
+  </select>
+
+  <p style="font-size:12px;opacity:0.6;">
+    Contenuti espliciti vietati. Il genere non può essere modificato dopo.
+  </p>
+
+  <button onclick="goCustomize()">Entra</button>
+</div>
+
+<!-- CUSTOMIZE -->
+<div id="customize" class="screen">
+  <div class="title">Customize Your Match</div>
+
+  <div class="interest-box">
+    <input id="interestInput" placeholder="Aggiungi interesse">
+    <button onclick="addInterest()">Aggiungi 👍</button>
+  </div>
+
+  <div class="interests" id="interestList"></div>
+
+  <!-- quick list -->
+  <div>
+    <button onclick="quickAdd('TikTok')">TikTok</button>
+    <button onclick="quickAdd('Instagram')">Instagram</button>
+    <button onclick="quickAdd('YouTube')">YouTube</button>
+    <button onclick="quickAdd('Discord')">Discord</button>
+    <button onclick="quickAdd('Reddit')">Reddit</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="title">Select Mode</div>
+
+  <div class="mode-buttons">
+    <button onclick="startVideo()">Video + Chat</button>
+    <button onclick="startVideo()">Only Chat</button>
+  </div>
+</div>
+
+<!-- VIDEO -->
+<div id="video">
+  <div class="topbar">
+    <div>
+      <button>Home</button>
+      <button>Friends</button>
+    </div>
+    <div>
+      <select id="country">
+        <option>🌍 All Countries</option>
+        <option>🇮🇹 Italy</option>
+        <option>🇺🇸 USA</option>
+        <option>🇬🇧 UK</option>
+      </select>
+
+      <select>
+        <option>Tutti</option>
+        <option>Maschi</option>
+        <option>Femmine</option>
+      </select>
+    </div>
+    <button>Settings</button>
+  </div>
+
+  <div class="videos">
+    <div class="video-box"></div>
+    <div class="video-box"></div>
+  </div>
+
+  <div class="controls">
+    <button class="big-btn">Stop</button>
+    <button class="big-btn">Report</button>
+    <button class="big-btn">Next</button>
+  </div>
+
+  <div class="chat">
+    <div style="padding:10px;">Chat</div>
+    <input placeholder="Scrivi...">
+    <button>Invia</button>
+  </div>
+</div>
+
+<script>
+function goCustomize(){
+  document.getElementById('login').classList.remove('active');
+  document.getElementById('customize').classList.add('active');
+}
+
+function startVideo(){
+  document.getElementById('customize').style.display='none';
+  document.getElementById('video').style.display='flex';
+}
+
+function addInterest(){
+  let input = document.getElementById('interestInput');
+  if(input.value){
+    let div = document.createElement('div');
+    div.className='tag';
+    div.innerText=input.value;
+    document.getElementById('interestList').appendChild(div);
+    input.value='';
+  }
+}
+
+function quickAdd(name){
+  let div = document.createElement('div');
+  div.className='tag';
+  div.innerText=name;
+  document.getElementById('interestList').appendChild(div);
+}
+</script>
+
+</body>
+</html>
