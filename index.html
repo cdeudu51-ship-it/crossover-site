@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CROSSOVER</title>
+
+<style>
+body {
+    margin:0;
+    font-family:'Segoe UI', sans-serif;
+    transition:0.3s;
+}
+
+/* THEMES */
+.light { background:#f5f7fb; color:#111; }
+.dark { background:#000; color:#fff; }
+.pink { background:#ffe4ec; color:#c2185b; }
+.halloween { background:#0a0a0a; color:orange; }
+.forest { background:#e8f5e9; color:#1b5e20; }
+.gold { background:#fff8dc; color:#b8860b; }
+
+/* LAYOUT */
+.app {
+    display:flex;
+    height:100vh;
+}
+
+.left {
+    flex:2;
+    display:flex;
+    flex-direction:column;
+    padding:15px;
+}
+
+.right {
+    flex:1;
+    border-left:1px solid #ccc;
+    display:flex;
+    flex-direction:column;
+}
+
+/* VIDEO */
+.video-container {
+    display:flex;
+    gap:10px;
+    flex:1;
+}
+
+.video-box {
+    flex:1;
+    background:black;
+    border-radius:15px;
+}
+
+/* CHAT */
+.chat-box {
+    flex:1;
+    overflow:auto;
+    padding:10px;
+}
+
+.chat-input {
+    display:flex;
+}
+
+.chat-input input {
+    flex:1;
+}
+
+/* BUTTON */
+button {
+    border:none;
+    padding:10px 14px;
+    border-radius:12px;
+    background:#4f46e5;
+    color:white;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover { transform:scale(1.05); }
+
+/* NAV */
+.navbar {
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    padding:10px;
+}
+
+/* COUNTRY */
+.country-box {
+    position:absolute;
+    top:60px;
+    right:20px;
+    background:white;
+    color:black;
+    max-height:250px;
+    overflow:auto;
+    border-radius:10px;
+    padding:10px;
+    display:none;
+}
+
+/* ANIMATIONS */
+@keyframes fall {
+    0% {transform:translateY(-100px);}
+    100% {transform:translateY(100vh);}
+}
+
+.emoji {
+    position:fixed;
+    animation:fall linear infinite;
+    opacity:0.5;
+}
+
+</style>
+</head>
+
+<body class="light">
+
+<!-- LOGIN -->
+<div id="login" style="text-align:center; padding:40px;">
+<h1 style="font-size:60px;">CROSSOVER</h1>
+<p>Safe & Global Connection</p>
+
+<input id="username" placeholder="Username"><br>
+<input type="password" placeholder="Password"><br>
+
+<select>
+<option>Male</option>
+<option>Female</option>
+</select>
+
+<p style="color:red;">Gender cannot be changed later</p>
+
+<button onclick="enter()">Enter</button>
+</div>
+
+<!-- INTEREST -->
+<div id="interest" style="display:none; text-align:center; padding:40px;">
+<h2 style="font-size:40px;">Customise your Match</h2>
+
+<input id="interestInput">
+<button onclick="addTag()">Add</button>
+
+<div id="tags"></div>
+
+<h2>Select Mode</h2>
+<button onclick="start()">Video + Chat</button>
+<button onclick="start()">Chat Only</button>
+</div>
+
+<!-- HOME -->
+<div id="home" style="display:none;">
+
+<div class="navbar">
+<button onclick="goHome()">HOME</button>
+<button onclick="goFriends()">FRIENDS</button>
+<button onclick="goSettings()">SETTINGS</button>
+</div>
+
+<div class="app">
+
+<div class="left">
+
+<div class="video-container">
+<div class="video-box"></div>
+<div class="video-box"></div>
+</div>
+
+<div>
+<button onclick="back()">⬅ Back</button>
+<button onclick="next()">Next</button>
+<button onclick="stop()">Stop</button>
+<button onclick="report()">Report</button>
+<button onclick="toggleCountries()">🌎</button>
+</div>
+
+<div id="countryBox" class="country-box"></div>
+
+</div>
+
+<div class="right">
+
+<div class="chat-box" id="chat"></div>
+
+<div class="chat-input">
+<input id="msg">
+<button onclick="send()">Send</button>
+</div>
+
+</div>
+
+</div>
+</div>
+
+<script>
+
+function enter(){
+    document.getElementById("login").style.display="none";
+    document.getElementById("interest").style.display="block";
+}
+
+function start(){
+    document.getElementById("interest").style.display="none";
+    document.getElementById("home").style.display="block";
+}
+
+function addTag(){
+    let t=document.createElement("span");
+    t.innerText=document.getElementById("interestInput").value;
+    document.getElementById("tags").appendChild(t);
+}
+
+function send(){
+    let d=document.createElement("div");
+    d.innerText=document.getElementById("msg").value;
+    document.getElementById("chat").appendChild(d);
+}
+
+function toggleCountries(){
+    let box=document.getElementById("countryBox");
+    box.style.display = box.style.display==="block" ? "none":"block";
+
+    if(box.innerHTML===""){
+        let countries=["Italy 🇮🇹","France 🇫🇷","Germany 🇩🇪","USA 🇺🇸"];
+        countries.sort().forEach(c=>{
+            let d=document.createElement("div");
+            d.innerText=c;
+            box.appendChild(d);
+        });
+    }
+}
+
+function next(){ alert("Next user"); }
+function stop(){ alert("Stopped"); }
+function report(){ alert("User reported"); }
+function back(){
+    document.getElementById("home").style.display="none";
+    document.getElementById("interest").style.display="block";
+}
+
+</script>
+
+</body>
+</html>
